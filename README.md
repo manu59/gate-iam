@@ -65,8 +65,9 @@ gate-iam/
 ├── README.md
 ├── docs/
 │   ├── adr/                    # Architecture Decision Records
-│   ├── architecture/           # Architecture diagrams & explanations
-│   └── domain/                 # Domain model documentation
+│   ├── examples/               # Sample data (canonical model)
+│   ├── technical/              # Developer documentation (domain model, engine, connectors)
+│   └── user/                   # Operator / IAM engineer documentation
 ├── backend/                    # Spring Boot application (core domain + API)
 ├── frontend/                   # Admin UI
 ├── connectors/                 # Target system connectors (GitHub, Vault, etc.)
