@@ -88,12 +88,16 @@ All significant decisions are documented as ADRs in [`docs/adr/`](docs/adr/READM
 | [ADR-0003](docs/adr/ADR-0003-canonical-model-and-projection-architecture.md) | Canonical Model and Projection Architecture | Accepted |
 | [ADR-0004](docs/adr/ADR-0004-role-mapping-resolution-strategy.md) | Role Mapping Resolution Strategy | Accepted |
 | [ADR-0005](docs/adr/ADR-0005-downstream-resource-lifecycle-management.md) | Downstream Resource Lifecycle Management | Accepted |
+| [ADR-0006](docs/adr/ADR-0006-language-and-application-framework.md) | Language and Application Framework | Accepted |
+| [ADR-0007](docs/adr/ADR-0007-persistence-strategy.md) | Persistence Strategy | Accepted |
+| [ADR-0008](docs/adr/ADR-0008-event-bus-strategy.md) | Domain Event Bus Strategy | Accepted |
+| [ADR-0009](docs/adr/ADR-0009-testing-strategy.md) | Testing Strategy | Accepted |
 
 ---
 
 ## Status
 
-> This project is in the **scoping phase**. The domain model and architecture decisions are being defined before implementation begins.
+> This project is in the **implementation phase**. Architecture decisions are finalized. Development follows TDD on feature branches.
 
 ---
 

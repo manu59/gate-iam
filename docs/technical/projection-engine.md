@@ -2,7 +2,7 @@
 
 This document describes how GATE computes `Assignment` records from `Membership` records and how those assignments are synchronized to downstream target systems.
 
-> **Source of truth**: [ADR-0003](../adr/ADR-0003-canonical-model-and-projection-architecture.md) and [ADR-0004](../adr/ADR-0004-role-mapping-resolution-strategy.md).
+> **Source of truth**: [ADR-0003](../adr/ADR-0003-canonical-model-and-projection-architecture.md), [ADR-0004](../adr/ADR-0004-role-mapping-resolution-strategy.md), and [ADR-0008](../adr/ADR-0008-event-bus-strategy.md).
 
 ---
 
@@ -108,9 +108,10 @@ The projection engine is triggered by domain events — it never polls for membe
 1. [Trigger]
    A membership becomes ACTIVE — either via API call or upstream import event.
 
-2. [Domain]
+2. [Domain + Outbox — atomic transaction]
    Membership entity created, validated, persisted.
-   Domain event emitted: MembershipGranted
+   OutboxEvent row inserted in the SAME database transaction.
+   Spring ApplicationEvent published post-commit via @TransactionalEventListener.
 
 3. [Application — ProjectionCalculationService]
    Receives MembershipGranted event.
@@ -118,7 +119,7 @@ The projection engine is triggered by domain events — it never polls for membe
    Generates one Assignment per resolved (targetSystem, targetIdentifier) pair.
 
 4. [Domain event]
-   One AssignmentRequested event emitted per Assignment.
+   One AssignmentRequested event emitted per Assignment (also via outbox).
 
 5. [Async — SyncDispatchService]
    One SyncOperation created per target system.
@@ -138,6 +139,16 @@ The projection engine is triggered by domain events — it never polls for membe
 ```
 
 **Revocation** follows the same flow in reverse, triggered by `MembershipRevoked` or `MembershipExpired` events.
+
+### Event durability (Outbox pattern)
+
+The event flow above uses the **transactional outbox pattern** (ADR-0008) to guarantee that no domain event is silently lost:
+
+- Steps 2 and 4 write an `OutboxEvent` row **in the same transaction** as the domain entity. If the JVM crashes after the transaction commits, the outbox row survives and is retried by the polling scheduler.
+- All event consumers must be **idempotent** — the outbox guarantees at-least-once delivery, not exactly-once.
+- Failed events are retried up to a configurable limit, then marked `failed_at` and surfaced as operational alerts.
+
+See [stack.md](stack.md#domain-event-bus) for the outbox table schema and the evolution path to Kafka.
 
 ---
 
