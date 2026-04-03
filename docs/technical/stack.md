@@ -21,6 +21,30 @@ This document describes the technology choices underpinning GATE IAM's implement
 
 ---
 
+## Developer Tooling
+
+| Tool | Role |
+|------|------|
+| `Makefile` | Shortcuts for common commands (`build`, `test`, `run`, `check`, `install-hooks`) |
+| `pre-commit` | Git hooks: Conventional Commits validation (`commit-msg`) + general quality checks (`pre-commit`) |
+| `Dependabot` | Automated weekly dependency updates for Gradle and GitHub Actions |
+
+### Local setup
+
+```bash
+# Install Git hooks (once per clone)
+make install-hooks
+
+# Compile and run all tests
+make check
+```
+
+Installed hooks:
+- **`commit-msg`** — enforces `<type>(<scope>): <description>` format via `conventional-pre-commit`
+- **`pre-commit`** — trims trailing whitespace, validates YAML/JSON, detects private keys, prevents direct commits to `main`
+
+---
+
 ## Multi-Module Structure
 
 The project is a **multi-module Gradle build**. Module boundaries enforce hexagonal architecture at compile time — a dependency violation is a build failure, not a code review comment.

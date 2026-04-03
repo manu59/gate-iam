@@ -3,7 +3,7 @@
 **Governance & Access for Teams Engine**
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/status-architecture%20phase-yellow)]()
+[![Status](https://img.shields.io/badge/status-implementation%20phase-blue)]()
 
 > A governance and synchronization platform for propagating externally managed memberships to downstream access-control systems.
 
@@ -62,17 +62,43 @@ A governance solution covers:
 
 ```
 gate-iam/
-├── README.md
+├── Makefile                        # Commandes courantes (build, test, run, …)
 ├── docs/
-│   ├── adr/                    # Architecture Decision Records
-│   ├── examples/               # Sample data (canonical model)
-│   ├── technical/              # Developer documentation (domain model, engine, connectors)
-│   └── user/                   # Operator / IAM engineer documentation
-├── backend/                    # Spring Boot application (core domain + API)
-├── frontend/                   # Admin UI
-├── connectors/                 # Target system connectors (GitHub, Vault, etc.)
-├── infrastructure/             # Docker Compose, deployment config
-└── .github/                    # CI/CD workflows, issue templates
+│   ├── adr/                        # Architecture Decision Records
+│   ├── technical/                  # Documentation développeur
+│   └── user/                       # Documentation opérateur / IAM engineer
+├── gate-iam-domain/                # Domaine pur — zéro Spring, zéro JPA
+├── gate-iam-application/           # Use cases — dépend du domaine uniquement
+├── gate-iam-infrastructure/        # Adapters JPA, connecteurs, outbox
+├── gate-iam-backend/               # Launcher Spring Boot, configuration, assemblage
+├── gradle/
+│   └── libs.versions.toml          # Version catalog centralisé
+└── .github/
+    ├── dependabot.yml              # Mises à jour automatiques des dépendances
+    └── workflows/                  # CI/CD
+```
+
+---
+
+## Getting Started
+
+**Prérequis :** Java 25 (Temurin), Docker (pour les tests d'intégration)
+
+```bash
+# Installer les git hooks (à faire une fois)
+make install-hooks
+
+# Compiler
+make build
+
+# Lancer les tests
+make test
+
+# Démarrer l'application
+make run
+
+# Afficher toutes les commandes disponibles
+make help
 ```
 
 ---
@@ -97,7 +123,7 @@ All significant decisions are documented as ADRs in [`docs/adr/`](docs/adr/READM
 
 ## Status
 
-> This project is in the **implementation phase**. Architecture decisions are finalized. Development follows TDD on feature branches.
+> Ce projet est en phase d'**implémentation**. Les décisions d'architecture sont finalisées. Le développement suit TDD sur des branches de fonctionnalités (`feat/US-NNN-slug`), avec semantic-release pour la gestion des versions et Dependabot pour la maintenance des dépendances.
 
 ---
 
