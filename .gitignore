@@ -1,0 +1,32 @@
+# Compiled output
+build/
+out/
+*.class
+
+# Gradle
+.gradle/
+gradle-app.setting
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.eclipse
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+spring.log
+logs/
+
+# Secrets / env
+.env
+*.env.local
+application-local.yml
+application-local.yaml

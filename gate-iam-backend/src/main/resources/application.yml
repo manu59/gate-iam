@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: gate-iam
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gate_iam
+    username: gate_iam
+    password: gate_iam
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized

@@ -6,7 +6,9 @@ Thank you for your interest in GATE IAM. This document explains how to contribut
 
 ## Project status
 
-GATE IAM is currently in its **architecture phase**. The domain model and core decisions are being stabilized through Architecture Decision Records (ADRs) before implementation begins. Contributions to the architecture documentation are welcome and particularly valuable at this stage.
+GATE IAM is in the **implementation phase**. Architecture decisions are finalized and documented in the ADRs. Development follows TDD on feature branches.
+
+Before contributing, read the [ADRs](docs/adr/README.md) and the [technical documentation](docs/technical/README.md) to understand the architectural constraints.
 
 ---
 
@@ -17,10 +19,10 @@ GATE IAM is currently in its **architecture phase**. The domain model and core d
 - Propose a new ADR for an architectural question not yet addressed
 - Improve domain model documentation or examples
 
-### Code (once implementation begins)
+### Code
 - Bug fixes
 - New connector implementations (GitHub, Vault, JFrog, Google Workspace, …)
-- Domain feature additions aligned with the architectural decisions
+- Domain feature additions aligned with the ADRs
 
 ### Documentation
 - Improve README clarity
@@ -43,7 +45,7 @@ Before submitting a pull request, open an issue to discuss your intent. This avo
 ## Submitting a pull request
 
 1. Fork the repository and create a branch from `main`
-2. Name your branch descriptively: `feat/github-connector`, `fix/projection-null-role`, `adr/audit-log-retention`
+2. Name your branch using the convention: `feat/US-NNN-slug` (linked to a GitHub issue)
 3. Keep commits focused and atomic — one logical change per commit
 4. Reference the related issue in your PR description: `Closes #42`
 5. Ensure your changes are consistent with the existing ADRs — if your change requires a new architectural decision, propose the ADR first
@@ -55,11 +57,31 @@ Before submitting a pull request, open an issue to discuss your intent. This avo
 - Discuss in the associated issue before opening the PR
 - ADRs are accepted by the maintainer after discussion; they are not merged unilaterally
 
+## Local setup
+
+**Prerequisites:** Java 25 (Temurin), Docker, `pre-commit`
+
+```bash
+# Install Git hooks (once per clone)
+make install-hooks
+
+# Compile without tests
+make build
+
+# Run tests
+make test
+
+# List all available commands
+make help
+```
+
+The `commit-msg` hook automatically validates the [Conventional Commits](https://www.conventionalcommits.org/) format before each commit. The `pre-commit` hook trims trailing whitespace, validates YAML/JSON files, detects unresolved merge conflicts, and prevents direct commits to `main`.
+
 ---
 
-## Code conventions (once implementation begins)
+## Code conventions
 
-- Language: **Java 21**, framework: **Spring Boot**
+- Language: **Java 25**, framework: **Spring Boot 3.5.x**
 - Architecture: hexagonal (Ports & Adapters) — domain must have zero infrastructure dependencies
 - No vendor-specific types in the `domain` package (no Keycloak, GitHub, Vault classes)
 - All domain decisions must be documented or reference an existing ADR
