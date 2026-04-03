@@ -1,6 +1,6 @@
 [versions]
 java              = "25"
-springBoot        = "3.5.0"
+springBoot        = "4.0.5"
 springDependency  = "1.1.7"
 archunit          = "1.4.0"
 testcontainers    = "1.20.6"
