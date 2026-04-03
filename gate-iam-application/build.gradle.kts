@@ -4,9 +4,5 @@ plugins {
 
 dependencies {
     implementation(project(":gate-iam-domain"))
-
-    testImplementation(platform("org.junit:junit-bom:6.0.3"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("org.assertj:assertj-core:3.27.3")
-    testImplementation("org.mockito:mockito-junit-jupiter:5.23.0")
+    // Common test deps (JUnit, AssertJ, Mockito, ArchUnit, Awaitility) come from root build.gradle.kts
 }
