@@ -30,6 +30,7 @@ This document describes the technology choices underpinning GATE IAM's implement
 | `pre-commit` | Git hooks: Conventional Commits validation (`commit-msg`) + general quality checks (`pre-commit`) |
 | `Dependabot` | Automated weekly dependency updates for Gradle and GitHub Actions |
 | `Testcontainers` | Spins up real PostgreSQL 17 containers for integration tests (no mocks) |
+| `SonarCloud` | Static analysis and Quality Gate on every pull request (security, bugs, code smells) |
 
 ### Local setup
 
@@ -40,6 +41,23 @@ make install-hooks
 # 2. Compile and run all tests (unit + integration)
 make check
 ```
+
+### SonarCloud (CI static analysis)
+
+SonarCloud analyses every pull request targeting `main`. The analysis runs after `./gradlew test` so that test results are included.
+
+**Configuration** (no file to maintain locally for developers):
+- Plugin: `org.sonarqube` — configured in root `build.gradle.kts`
+- `sonar.projectKey` and `sonar.organization` set in the `sonar {}` block
+- `SONAR_TOKEN` injected via GitHub Actions secret (Settings → Secrets → `SONAR_TOKEN`)
+- `GITHUB_TOKEN` provided automatically by GitHub Actions for PR decoration
+
+**To run locally** (requires a personal token from SonarCloud → My Account → Security):
+```bash
+SOMAR_TOKEN=<your_token> ./gradlew test sonar
+```
+> Replace `<your_token>` with a token generated in SonarCloud → My Account → Security.
+> The Quality Gate result appears as a check on the pull request. A failing Quality Gate does **not** block the merge by default — configure branch protection in SonarCloud if you want to enforce it.
 
 > **Prerequisite for integration tests**: a running Docker-compatible daemon is required (Docker Desktop, Rancher Desktop, OrbStack, Colima, etc.). Testcontainers auto-detects the socket; no extra configuration is needed.
 

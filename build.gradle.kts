@@ -1,5 +1,17 @@
 plugins {
     java
+    // org.sonarqube plugin is declared but the `sonar` task is not used in CI yet.
+    // SonarCloud Automatic Analysis is active. Re-enable ./gradlew sonar in ci.yml
+    // once JaCoCo is configured to provide coverage data.
+    alias(libs.plugins.sonarqube)
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "manu59_gate-iam")
+        property("sonar.organization", "Kinto")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
 }
 
 subprojects {

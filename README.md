@@ -4,6 +4,8 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-implementation%20phase-blue)]()
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kinto_gate-iam&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=kinto_gate-iam)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=kinto_gate-iam&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=kinto_gate-iam)
 
 > A governance and synchronization platform for propagating externally managed memberships to downstream access-control systems.
 
