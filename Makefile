@@ -11,9 +11,9 @@ help:
 build:
 	$(GRADLE) build -x test
 
-## test: lance tous les tests
+## test: lance tous les tests avec résumé par module
 test:
-	$(GRADLE) test
+	$(GRADLE) test --rerun
 
 ## test-arch: lance uniquement les tests d'architecture ArchUnit
 test-arch:
