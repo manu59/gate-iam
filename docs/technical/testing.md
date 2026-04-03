@@ -23,6 +23,9 @@ GATE uses **Test-Driven Development (TDD)**. Tests are not written after the fac
     /─────────────────\  (domain + use cases — pure Java, no Spring)
    ───────────────────────
         ArchUnit  (continuous — runs on every build)
+
+   ════════════════════════
+        SonarCloud  (static analysis — runs on every pull request)
 ```
 
 | Layer | Scope | Tools | Approximate speed |
@@ -31,6 +34,9 @@ GATE uses **Test-Driven Development (TDD)**. Tests are not written after the fac
 | Integration | JPA adapters, connectors, event consumers | Spring Boot Test, Testcontainers, Awaitility | 2–10 s |
 | E2E / Contract | Full REST API | Spring MockMvc / RestAssured | 5–30 s |
 | ArchUnit | Package dependency rules | ArchUnit | < 1 s/rule |
+| SonarCloud | Static analysis (bugs, security hotspots, code smells) | SonarCloud SaaS | async (CI) |
+
+> SonarCloud is **not a test runner** — it does not replace the pyramid. It analyses the compiled code and test results produced by `./gradlew test` and posts a Quality Gate result on the pull request.
 
 ---
 
