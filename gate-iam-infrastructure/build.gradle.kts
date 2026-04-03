@@ -16,6 +16,8 @@ dependencies {
     implementation(project(":gate-iam-application"))
 
     implementation(libs.spring.boot.starter.data.jpa)
+    implementation(libs.flyway.core)
+    runtimeOnly(libs.flyway.database.postgresql)
     runtimeOnly(libs.postgresql)
 
     testImplementation(libs.spring.boot.starter.test)

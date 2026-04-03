@@ -14,8 +14,9 @@ This document describes the technology choices underpinning GATE IAM's implement
 | Framework | Spring Boot | 3.5.x |
 | Build | Gradle (Kotlin DSL) | 9.x |
 | Database | PostgreSQL | 17+ |
-| ORM | Spring Data JPA + Hibernate | — |
-| Schema migrations | Flyway | — |
+| ORM | Spring Data JPA + Hibernate | — (managed by Spring Boot BOM) |
+| Schema migrations | Flyway | — (managed by Spring Boot BOM) |
+| Integration test runtime | Testcontainers | 1.20.6 |
 | Event bus (MVP) | Spring Events + PostgreSQL Outbox | — |
 | Virtual threads | Project Loom (`spring.threads.virtual.enabled=true`) | stable since Java 21 |
 
@@ -28,16 +29,19 @@ This document describes the technology choices underpinning GATE IAM's implement
 | `Makefile` | Shortcuts for common commands (`build`, `test`, `run`, `check`, `install-hooks`) |
 | `pre-commit` | Git hooks: Conventional Commits validation (`commit-msg`) + general quality checks (`pre-commit`) |
 | `Dependabot` | Automated weekly dependency updates for Gradle and GitHub Actions |
+| `Testcontainers` | Spins up real PostgreSQL 17 containers for integration tests (no mocks) |
 
 ### Local setup
 
 ```bash
-# Install Git hooks (once per clone)
+# 1. Install Git hooks (once per clone)
 make install-hooks
 
-# Compile and run all tests
+# 2. Compile and run all tests (unit + integration)
 make check
 ```
+
+> **Prerequisite for integration tests**: a running Docker-compatible daemon is required (Docker Desktop, Rancher Desktop, OrbStack, Colima, etc.). Testcontainers auto-detects the socket; no extra configuration is needed.
 
 Installed hooks:
 - **`commit-msg`** — enforces `<type>(<scope>): <description>` format via `conventional-pre-commit`
@@ -107,19 +111,42 @@ Migration files live in `gate-iam-infrastructure/src/main/resources/db/migration
 
 ```
 V{version}__{description}.sql
+```
 
-V001__create_persons.sql
-V002__create_groups.sql
-V003__create_memberships.sql
-V004__create_target_systems.sql
-V005__create_projection_rules.sql
-V006__create_assignments.sql
-V007__create_sync_operations.sql
-V008__create_target_resource_records.sql
-V009__create_outbox_events.sql
+**Current migrations (US-002 baseline):**
+
+```
+V001__init.sql   ← schema baseline; domain tables added in US-004+
 ```
 
 Flyway runs automatically on startup. Modified historical migrations are rejected via checksum validation.
+
+### Integration testing (Testcontainers)
+
+Persistence integration tests spin up a real PostgreSQL 17 container via **Testcontainers** — no mocks, no in-memory database.
+
+```
+gate-iam-backend/src/test/
+└── persistence/
+    └── FlywayMigrationIntegrationTest.java   ← verifies all migrations apply cleanly
+```
+
+The test verifies that `flyway_schema_history` contains at least one successful migration entry after Spring Boot context startup.
+
+#### Local container runtime
+
+Testcontainers requires a running Docker-compatible daemon. Any Docker-compatible runtime should work (Docker Desktop, OrbStack, Colima, Rancher Desktop).
+
+> **Validated runtime**: only **Rancher Desktop** has been tested so far. Other runtimes are expected to work but have not been verified on this project.
+
+`gate-iam-backend/build.gradle.kts` includes an automatic workaround for **Rancher Desktop** specifically: it uses containerd as its runtime, which does not support the privileged socket bind-mount that Ryuk (the Testcontainers cleanup container) requires. When `~/.rd/docker.sock` is detected, the test JVM automatically receives:
+
+```kotlin
+environment("DOCKER_HOST", "unix://${rancherSocket.absolutePath}")
+environment("TESTCONTAINERS_RYUK_DISABLED", "true")
+```
+
+No manual configuration is needed — this activates only when Rancher Desktop is present and has no effect on other runtimes.
 
 ### JSONB columns
 
