@@ -32,4 +32,4 @@ awaitility                      = { module = "org.awaitility:awaitility", versio
 [plugins]
 spring-boot           = { id = "org.springframework.boot", version.ref = "springBoot" }
 spring-dependency     = { id = "io.spring.dependency-management", version.ref = "springDependency" }
-sonarqube             = { id = "org.sonarqube", version = "5.1.0.4882" }
+sonarqube             = { id = "org.sonarqube", version = "7.2.3.7755" }
