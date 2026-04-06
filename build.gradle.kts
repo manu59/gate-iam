@@ -34,7 +34,7 @@ subprojects {
         "testImplementation"("org.assertj:assertj-core:3.27.3")
         "testImplementation"("org.mockito:mockito-core:5.23.0")
         "testImplementation"("com.tngtech.archunit:archunit-junit5:1.4.0")
-        "testImplementation"("org.awaitility:awaitility:4.2.2")
+        "testImplementation"("org.awaitility:awaitility:4.3.0")
     }
 
     tasks.withType<Test> {
