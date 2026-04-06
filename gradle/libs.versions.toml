@@ -2,7 +2,7 @@
 java              = "25"
 springBoot        = "3.5.0"
 springDependency  = "1.1.7"
-archunit          = "1.4.0"
+archunit          = "1.4.1"
 testcontainers    = "2.0.4"
 postgresql        = "42.7.10"
 junit             = "5.12.2"
