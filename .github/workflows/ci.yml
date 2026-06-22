@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         # fetch-depth: 0 is required by SonarCloud CI-based analysis for new-code detection — re-enable with JaCoCo
 
       - name: Set up Java 25
